@@ -2,7 +2,7 @@ import { Contract, providers, utils } from "ethers";
 import Head from "next/head";
 import React, { useEffect, useRef, useState } from "react";
 import Web3Modal from "web3modal";
-import { abi, NFT_CONTRACT_ADDRESS } from "../constants";
+import { abi, MESSAGE_CONTRACT_ADDRESS } from "../constants";
 import styles from "../styles/Home.module.css";
 import { Col, Card, Button } from 'react-bootstrap';
 
@@ -63,7 +63,7 @@ export default function Home() {
     try {
       const signer = await getProviderOrSigner(true);
 
-      const messageContract = new Contract(NFT_CONTRACT_ADDRESS, abi, signer);
+      const messageContract = new Contract(MESSAGE_CONTRACT_ADDRESS, abi, signer);
 
       // setLoading(true);
 
@@ -80,7 +80,7 @@ export default function Home() {
     try {
       const provider = await getProviderOrSigner(true);
 
-      const messageContract = new Contract(NFT_CONTRACT_ADDRESS, abi, signer);
+      const messageContract = new Contract(MESSAGE_CONTRACT_ADDRESS, abi, signer);
 
       const getmess = await messageContract.getMessage();
     } catch (error) {
