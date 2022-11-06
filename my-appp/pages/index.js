@@ -10,6 +10,10 @@ export default function Home() {
 
   const [walletConnected, setWalletConnected] = useState(false);
   const [Loading, setLoading] = useState(false);
+  const [inputMessage, setInputMessage] = useState("");
+  const [inputAddress, setInputAddress] = useState("");
+  const [retrieveMessage, setRetrieveMessage] = useState("");
+  const [r, getr] = useState("")
 
   const web3ModalRef = useRef();
 
@@ -54,6 +58,7 @@ export default function Home() {
       });
 
       connectWallet();
+      setRetrieveMessage("")
     }
   }, [walletConnected]);
 
@@ -67,7 +72,7 @@ export default function Home() {
 
       // setLoading(true);
 
-      const mess = await messageContract.setMessage()
+      const mess = await messageContract.setMessage(inputAddress, inputMessage)
 
       // setLoading(false);
 
@@ -80,9 +85,11 @@ export default function Home() {
     try {
       const provider = await getProviderOrSigner(true);
 
-      const messageContract = new Contract(MESSAGE_CONTRACT_ADDRESS, abi, signer);
+      const messageContract = new Contract(MESSAGE_CONTRACT_ADDRESS, abi, provider);
 
-      const getmess = await messageContract.getMessage();
+      const getmess = await messageContract.getMessage(inputAddress);
+      console.log(getmess)
+      setRetrieveMessage(getmess)
     } catch (error) {
       console.error(error)
     }
@@ -167,28 +174,28 @@ export default function Home() {
           </Card.Body> */}
         {/* </Card> */}
       {/* </Col>  */}
-      <form name="contact" className="py-3" data-netlify="true"  id="my-form" >       
+      <form name="contact" className="py-3"  id="my-form" >       
           <div className="form-group py-2">
-            <input type="tel"  name="message" className="form-control" placeholder="Wallet address" required />
+            <input placeholder="Wallet address"  required onChange={(e) => setInputAddress(e.target.value || "")} />
         </div>
         
         <div className="form-group py-2">
-            <textarea type="message" name="message" id="message" cols="50" rows="5" className="form-control" placeholder="Your Message" required></textarea>
+            <textarea name="message" id="message" cols="50" rows="5" placeholder="Your Message" required onChange={(e) => setInputMessage(e.target.value || "")}>
+            </textarea>
         </div>
         
         <Button className="contact btn-block text-uppercase text-white py-3 my-4" onClick={setMessage}>send message</Button> 
       </form>
 
       <form name="contact" className="py-3 mx-2" data-netlify="true"  id="my-form" >   
-      <div className="form-group py-2">
+      {/* <div className="form-group py-2">
             <input type="tel"  name="message" className="form-control" placeholder="Wallet address" required />
-        </div>
-
-        <div >
-            
-        </div>
+        </div> */}
         
         <Button className="contact btn-block text-uppercase text-white py-1 my-2" onClick={getMessage}>get message</Button> 
+        <div >
+            Message: {retrieveMessage}
+        </div>
       </form>
 
 
